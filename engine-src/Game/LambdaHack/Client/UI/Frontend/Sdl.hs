@@ -143,7 +143,8 @@ startupFun coscreen soptions@ClientOptions{..} rfMVar = do
            return $ Just (sdlFont, realSize + cellSizeAdd)
          Just (FontMapBitmap fname cellSizeAdd) -> do
            sdlFont <- loadFontFile fname 0  -- size ignored for bitmap fonts
-           isFontMono <- TTF.isMonospace sdlFont
+--           isFontMono <- TTF.isMonospace sdlFont
+           isFontMono <- return True -- fuck this
            realSize <- TTF.height sdlFont
            let !_A = assert (isFontMono && realSize > 0) ()  -- sanity
            return $ Just (sdlFont, realSize + cellSizeAdd)
@@ -588,6 +589,7 @@ drawFrame coscreen ClientOptions{..} sess@FrontendSession{..} curFrame = do
         then return $! i + 1
         else do
           let Point{..} = toEnum i
+--          putStrLn ("wtf char")
           setSquareChar px py (Color.AttrCharW32 w)
           return $! i + 1
       drawMonoOverlay :: OverlaySpace -> IO ()
